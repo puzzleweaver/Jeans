@@ -77,6 +77,23 @@ public class Population {
 		// create next generation
 		ArrayList<Genome> nextGen = new ArrayList<>();
 		int count;
+		
+		// copy champions
+		for(int i = 0; i < species.size(); i++) {
+			double best = -1, val;
+			Genome beast = null;
+			for(int j = 0; j < species.get(i).size(); j++) {
+				val = fitness(species.get(i).get(j));
+				if(val > best) {
+					best = val;
+					beast = species.get(i).get(j);
+				}
+			}
+			nextGen.add(beast);
+			offspring[i]--;
+		}
+		
+		// fill in the rest with offspring
 		for(int i = 0; i < species.size(); i++) {
 			count = 0;
 			lewp : while(count < offspring[i]) {
