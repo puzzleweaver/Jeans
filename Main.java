@@ -33,9 +33,9 @@ public class Main {
 		}
 		
 		System.out.println("CHAMP: " + best);
-		champ.clear();
 		for (int a = 0; a < 2; a++) {
 			for (int b = 0; b < 2; b++) {
+				champ.clear();
 				champ.iterate(new double[] { a, b, 1.0 }, 5);
 				System.out.println(a + "^" + b + " = " + champ.getOut()[0]);
 			}

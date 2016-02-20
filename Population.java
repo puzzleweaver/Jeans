@@ -9,6 +9,9 @@ public class Population {
 	public ArrayList<Genome> genome = new ArrayList<Genome>();
 	public ArrayList<Genome> rep = new ArrayList<Genome>();
 	public int nextRep;
+	
+	//distance constants
+	public double c1 = 1.0, c2 = 1.0, c3 = 0.4;
 
 	public Population() {
 		// create simple initial network manually
@@ -160,10 +163,10 @@ public class Population {
 				}
 			}
 		}
-		W /= 1.0*num;
+		W /= num;
 
-		double c1 = 1.0, c2 = 1.0, c3 = 0.4, N = Math.max(a.cons.size(), b.cons.size());
-		return (E+D)/N + c3*W;
+		double N = Math.max(a.cons.size(), b.cons.size());
+		return c1*D/N + c2*E/N + c3*W;
 
 	}
 
@@ -186,9 +189,9 @@ public class Population {
 
 	public double fitness(Genome g) {
 		double fit = 4.0;
-		g.clear();
 		for (int a = 0; a < 2; a++) {
 			for (int b = 0; b < 2; b++) {
+				g.clear();
 				g.iterate(new double[] { a, b, 1.0 }, 5);
 				double delta = Math.abs((((a == 1) ^ (b == 1)) ? 1.0 : 0.0) - (g.getOut()[0]));
 				fit -= delta;
@@ -197,19 +200,4 @@ public class Population {
 		return fit / 4.0;
 	}
 	
-//	public double fitness2(Genome g) {
-//		double fit = 0.0;
-//		for(int a = 0; a < 2; a++) {
-//			for(int b = 0; b < 2; b++) {
-//				g.clear();
-//				g.iterate(new double[]{a, b, 1.0}, 20);
-////				double delta = Math.abs(((a == 0 ^ b == 0) ? 1.0 : 0.0) - (g.getOut()[0]));
-//				if((a == 0 ^ b == 0) == (g.getOut()[0] >= 0.5))
-//					fit += 0.25;
-////				fit -= delta;
-//			}
-//		}
-//		return fit;
-//	}
-
 }
