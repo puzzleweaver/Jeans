@@ -56,22 +56,21 @@ public class Genome {
 			cons.add(a.cons.get(i).get());
 		}
 		nodes = new ArrayList<>();
+		boolean aHas[] = new boolean[Node.nodeGIN];
 		for(int i = 0; i < a.nodes.size(); i++) {
 			nodes.add(a.nodes.get(i).getNode());
+			aHas[nodes.get(nodes.size()-1).gin] = true;
 		}
 		inNum = a.inNum;
 		outNum = a.outNum;
 
 		int shared[] = new int[b.nodes.size()];
 		// copy b's nodes that aren't part of a's
-		loop : for(int i = 0; i < b.nodes.size(); i++) {
-			for(int j = 0; j < nodes.size(); j++) {
-				if(nodes.get(j).gin == b.nodes.get(i).gin) {
-					continue loop;
-				}
+		for(int i = 0; i < b.nodes.size(); i++) {
+			if(!aHas[b.nodes.get(i).gin]) {
+				nodes.add(b.nodes.get(i).getNode());
+				shared[i] = nodes.size()-1;
 			}
-			nodes.add(b.nodes.get(i).getNode());
-			shared[i] = nodes.size()-1;
 		}
 
 		// crossover
@@ -191,16 +190,17 @@ public class Genome {
 		}
 	}
 
-	public ArrayList<Integer> prop, next;
+	public ArrayList<Integer> toUse;
 	public boolean used[];
 	
 	public void propagate(int id) {
 		Node n = nodes.get(id);
 		for(int i = 0; i < n.cons.size(); i++) {
 			if(cons.get(n.cons.get(i)).enabled) {
-				if(!used[cons.get(n.cons.get(i)).b])
-					next.add(cons.get(n.cons.get(i)).b);
-				used[cons.get(n.cons.get(i)).b] = true;
+				if(!used[cons.get(n.cons.get(i)).b]) {
+					toUse.add(cons.get(n.cons.get(i)).b);
+					used[cons.get(n.cons.get(i)).b] = true;
+				}
 				nodes.get(cons.get(n.cons.get(i)).b).val += n.get()*cons.get(n.cons.get(i)).weight;
 			}
 		}
@@ -208,24 +208,23 @@ public class Genome {
 	
 	public void iterate(double[] in, int iters) {
 		
-		prop = new ArrayList<>();
-		next = new ArrayList<>();
+		toUse = new ArrayList<>();
 		used = new boolean[nodes.size()];
 		
+		// add inputs to 
 		for(int i = 0; i < inNum; i++) {
 			nodes.get(i).val = in[i];
-			prop.add(i);
+			toUse.add(i);
 			used[i] = true;
 		}
 		
 		for(int iter = 0; iter < iters; iter++) {
 			
-			int size = prop.size();
+			int size = toUse.size();
 			for(int i = 0; i < size; i++) {
-				propagate(prop.get(i));
+				propagate(toUse.get(0));
+				toUse.remove(0);
 			}
-			prop = next;
-			next = new ArrayList<>();
 			used = new boolean[nodes.size()];
 			
 		}
