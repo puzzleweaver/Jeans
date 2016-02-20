@@ -1,8 +1,10 @@
-public class Main {
 
+public class Main implements FitnessEvaluator {
+	
 	public static void main(String[] args) {
-
+		Main fitness = new Main();
 		Population pop = new Population();
+		pop.setFitnessEvaluator(fitness);
 		for (int i = 0; i < 40; i++) {
 			// System.out.println("GEN: " + i);
 			pop.advance(1);
@@ -18,7 +20,7 @@ public class Main {
 			for(int j = 0; j < pop.genome.size(); j++) {
 				Genome g = pop.genome.get(j);
 //				g = new Genome(""+g);
-				best = Math.max(best, pop.fitness(g));
+				best = Math.max(best, fitness.getFitness(g));
 			}
 			System.out.println("GEN" + i + ": " + best);
 		}
@@ -26,8 +28,8 @@ public class Main {
 		double best = 0;
 		Genome champ = null;
 		for (int j = 0; j < pop.genome.size(); j++) {
-			if (best < pop.fitness(pop.genome.get(j))) {
-				best = pop.fitness(pop.genome.get(j));
+			if (best < fitness.getFitness(pop.genome.get(j))) {
+				best = fitness.getFitness(pop.genome.get(j));
 				champ = pop.genome.get(j);
 			}
 		}
@@ -43,4 +45,18 @@ public class Main {
 
 	}
 
+	
+	public double getFitness(Genome g) {
+		double fit = 4.0;
+		for (int a = 0; a < 2; a++) {
+			for (int b = 0; b < 2; b++) {
+				g.clear();
+				g.iterate(new double[] { a, b, 1.0 }, 5);
+				double delta = Math.abs((((a == 1) ^ (b == 1)) ? 1.0 : 0.0) - (g.getOut()[0]));
+				fit -= delta;
+			}
+		}
+		return fit / 4.0;
+	}
+	
 }
