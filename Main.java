@@ -15,8 +15,10 @@ public class Main {
 			// }
 			// System.out.println();
 			double best = 0;
-			for (int j = 0; j < pop.genome.size(); j++) {
-				best = Math.max(best, pop.fitness(pop.genome.get(j)));
+			for(int j = 0; j < pop.genome.size(); j++) {
+				Genome g = pop.genome.get(j);
+//				g = new Genome(""+g);
+				best = Math.max(best, pop.fitness(g));
 			}
 			System.out.println("GEN" + i + ": " + best);
 		}
