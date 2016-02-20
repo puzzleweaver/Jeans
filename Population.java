@@ -5,13 +5,13 @@ public class Population {
 
 	public static Random r = new Random();
 
-	public double targetPop = 150, distThreshold = 3.0;
+	public double targetPop = 150, distThreshold = 1.0;
 	public ArrayList<Genome> genome = new ArrayList<Genome>();
 	public ArrayList<Genome> rep = new ArrayList<Genome>();
 	public int nextRep;
 	
 	//distance constants
-	public double c1 = 1.0, c2 = 1.0, c3 = 0.4;
+	public double c1 = 1.0, c2 = 1.0, c3 = 0.8;
 	
 	private FitnessEvaluator fitness;
 
@@ -32,6 +32,12 @@ public class Population {
 	
 	public void advance(int gens) {
 		for(int n = 0; n < gens; n++) {
+			
+			double fits[] = new double[genome.size()];
+			for(int i = 0; i < fits.length; i++) {
+				fits[i] = fitness.getFitness(genome.get(i));
+			}
+			
 			// reset species value for each genome or create new species when necessary
 			double dist, min = Double.MAX_VALUE;
 			for(int i = 0; i < genome.size(); i++) {
@@ -49,11 +55,13 @@ public class Population {
 					nextRep++;
 				}
 			}
+			
+			System.out.println(nextRep);
 	
 			// calculate number of offspring for each species
 			double offspring[] = new double[nextRep], total = 0.00001, delta;
 			for(int i = 0; i < genome.size(); i++) {
-				delta = fitness.getFitness(genome.get(i))/share(genome.get(i));
+				delta = fits[i]/share(genome.get(i));
 				offspring[genome.get(i).species] += delta;
 				total += delta;
 			}
@@ -62,21 +70,21 @@ public class Population {
 			}
 	
 			// initialize arrays to store all genomes by species
-			ArrayList<ArrayList<Genome>> species = new ArrayList<>();
+			ArrayList<ArrayList<Integer>> species = new ArrayList<>();
 			for(int i = 0; i < nextRep; i++)
-				species.add(new ArrayList<Genome>());
+				species.add(new ArrayList<Integer>());
 			for(int i = 0; i < genome.size(); i++)
-				species.get(genome.get(i).species).add(genome.get(i));
+				species.get(genome.get(i).species).add(i);
 	
 			// kill off the bottom half of each species
 			for(int i = 0; i < species.size(); i++) {
 				double fit = 0;
 				for(int j = 0; j < species.get(i).size(); j++) {
-					fit += fitness.getFitness(species.get(i).get(j));
+					fit += fits[species.get(i).get(j)];
 				}
 				fit /= species.get(i).size();
 				for(int j = 0; j < species.get(i).size(); j++) {
-					if(fitness.getFitness(species.get(i).get(j)) < fit) {
+					if(fits[species.get(i).get(j)] < fit) {
 						species.get(i).remove(j);
 						j--;
 					}
@@ -90,22 +98,22 @@ public class Population {
 			// copy champions
 			for(int i = 0; i < species.size(); i++) {
 				double best = 0, val;
-				Genome beast = null;
+				int beast = 0;
 				for(int j = 0; j < species.get(i).size(); j++) {
-					val = fitness.getFitness(species.get(i).get(j));
+					val = fits[species.get(i).get(j)];
 					if(val > best) {
 						best = val;
 						beast = species.get(i).get(j);
 					}
 				}
-				nextGen.add(beast);
+				nextGen.add(genome.get(beast));
 				//fill in the rest with offspring
 				count = 0;
 				loop : while(count < offspring[i] - 1) {
 					if(Math.random() < 0.25) {
 						// asexual
 						int id = r.nextInt(species.get(i).size());
-						nextGen.add(new Genome(species.get(i).get(id)));
+						nextGen.add(new Genome(genome.get(species.get(i).get(id))));
 						count++;
 					}else {
 						// sexual
@@ -113,7 +121,7 @@ public class Population {
 								id2 = r.nextInt(species.get(i).size());
 						if(id1 == id2)
 							continue loop;
-						nextGen.add(new Genome(species.get(i).get(id1), species.get(i).get(id2)));
+						nextGen.add(new Genome(genome.get(species.get(i).get(id1)), genome.get(species.get(i).get(id2))));
 						count++;
 					}
 				}

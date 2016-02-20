@@ -112,7 +112,7 @@ public class Genome {
 	
 	// get text to save
 	public String toString() {
-		String out = cons.size() + " " + nodes.size() + " " + Node.nodeGIN + " " + Connection.conGIN + " " + inNum + " " + outNum + "\n";
+		String out = cons.size() + " " + nodes.size() + " " + inNum + " " + outNum + "\n";
 		for(int i = 0; i < cons.size(); i++) {
 			out += cons.get(i).a + " " + cons.get(i).b + " " + cons.get(i).weight + " " + cons.get(i).gin + "\n";
 		}
@@ -128,8 +128,6 @@ public class Genome {
 	public Genome(String s) {
 		StringTokenizer st = new StringTokenizer(s);
 		int conNum = Integer.parseInt(st.nextToken()), nodeNum = Integer.parseInt(st.nextToken());
-		Node.nodeGIN = Integer.parseInt(st.nextToken());
-		Connection.conGIN = Integer.parseInt(st.nextToken());
 		inNum = Integer.parseInt(st.nextToken());
 		outNum = Integer.parseInt(st.nextToken());
 		for(int i = 0; i < conNum; i++) {
