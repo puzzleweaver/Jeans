@@ -3,13 +3,22 @@ public class Main {
 	public static void main(String[] args) {
 
 		Population pop = new Population();
-		for(int i = 0; i < 50; i++) {
-			System.out.println("GEN: " + i);
+		for(int i = 0; i < 100; i++) {
+//			System.out.println("GEN: " + i);
 			pop.advance(1);
-		}
-		
-		for(int i = 0; i < pop.genome.size(); i++) {
-			System.out.println(pop.fitness(pop.genome.get(i)) + " " + pop.fitness2(pop.genome.get(i)));
+			int[] spec = new int[pop.nextRep];
+			for(int j = 0; j < pop.genome.size(); j++) {
+				spec[pop.genome.get(j).species]++;
+			}
+//			for(int j = 0; j < pop.nextRep; j++) {
+//				System.out.print(spec[j] + " ");
+//			}
+//			System.out.println();
+			double best = 0;
+			for(int j = 0; j < pop.genome.size(); j++) {
+				best = Math.max(best, pop.fitness(pop.genome.get(j)));
+			}
+			System.out.println(best);
 		}
 		
 	}

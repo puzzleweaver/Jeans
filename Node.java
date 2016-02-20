@@ -23,7 +23,7 @@ public class Node {
 		Node n = new Node(false);
 		ArrayList<Integer> nt = new ArrayList<>();
 		for(int i = 0; i < cons.size(); i++) {
-			nt.add((int) cons.get(i));
+			nt.add(0+cons.get(i));
 		}
 		n.cons = nt;
 		n.val = val;

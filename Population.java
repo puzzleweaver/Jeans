@@ -35,7 +35,6 @@ public class Population {
 			}
 			if(min >= distThreshold) {
 				// add new species
-				System.out.println("NEW SPECIES");
 				rep.add(genome.get(i));
 				genome.get(i).species = nextRep;
 				nextRep++;
@@ -174,13 +173,11 @@ public class Population {
 
 	public double fitness(Genome g) {
 		double fit = 4.0;
+		g.clear();
 		for(int a = 0; a < 2; a++) {
 			for(int b = 0; b < 2; b++) {
-				g.clear();
 				g.iterate(new double[]{a, b, 1.0}, 20);
 				double delta = Math.abs(((a == 0 ^ b == 0) ? 1.0 : 0.0) - (g.getOut()[0]));
-//				if((a == 0 ^ b == 0) == (g.getOut()[0] >= 0.75))
-//					fit += 0.25;
 				fit -= delta;
 			}
 		}

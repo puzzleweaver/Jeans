@@ -58,7 +58,6 @@ public class Genome {
 		inNum = a.inNum;
 		outNum = a.outNum;
 
-
 		int shared[] = new int[b.nodes.size()];
 		// copy b's nodes that aren't part of a's
 		loop : for(int i = 0; i < b.nodes.size(); i++) {
@@ -68,6 +67,7 @@ public class Genome {
 				}
 			}
 			nodes.add(b.nodes.get(i).getNode());
+			shared[i] = nodes.size()-1;
 		}
 
 		// crossover
@@ -91,7 +91,7 @@ public class Genome {
 					}
 				}
 				if(!added)
-					cons.add(b.cons.get(i));
+					cons.add(b.cons.get(i).get());
 			}
 		}
 		
