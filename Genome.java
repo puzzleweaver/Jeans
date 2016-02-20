@@ -67,7 +67,7 @@ public class Genome {
 					continue loop;
 				}
 			}
-			nodes.add(b.nodes.get(i));
+			nodes.add(b.nodes.get(i).getNode());
 		}
 
 		// crossover
@@ -106,7 +106,7 @@ public class Genome {
 
 		mutate();
 	}
-
+	
 	public void mutate() {
 		// add node
 		if(Math.random() < 0.03) {
