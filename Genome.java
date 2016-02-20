@@ -106,7 +106,7 @@ public class Genome {
 
 		mutate();
 	}
-
+	
 	public void mutate() {
 		// add node
 		if(Math.random() < 0.03) {

@@ -96,7 +96,7 @@ public class Population {
 		// fill in the rest with offspring
 		for(int i = 0; i < species.size(); i++) {
 			count = 0;
-			lewp : while(count < offspring[i]) {
+			loop : while(count < offspring[i]) {
 				if(Math.random() < 0.25) {
 					// asexual
 					int id = r.nextInt(species.get(i).size());
@@ -107,7 +107,7 @@ public class Population {
 					int id1 = r.nextInt(species.get(i).size()),
 							id2 = r.nextInt(species.get(i).size());
 					if(id1 == id2)
-						continue lewp;
+						continue loop;
 					nextGen.add(new Genome(species.get(i).get(id1), species.get(i).get(id2)));
 					count++;
 				}
@@ -177,7 +177,8 @@ public class Population {
 	}
 
 	public double share(Genome g) {
-		double sum = 0.1;
+		//won't be dividing by zero because a genome is always close enough to itself
+		double sum = 0;
 		for(int i = 0; i < genome.size(); i++) {
 			double dist = dist(genome.get(i), g);
 			if(dist < distThreshold) {
@@ -188,18 +189,31 @@ public class Population {
 	}
 
 	public double fitness(Genome g) {
-		g.clear();
 		double fit = 4.0;
+		g.clear();
 		for(int a = 0; a < 2; a++) {
 			for(int b = 0; b < 2; b++) {
 				g.iterate(new double[]{a, b, 1.0}, 20);
 				double delta = Math.abs(((a == 0 ^ b == 0) ? 1.0 : 0.0) - (g.getOut()[0]));
-//				if((a == 0 ^ b == 0) == (g.getOut()[0] >= 0.75))
-//					fit += 0.25;
 				fit -= delta;
 			}
 		}
 		return fit/4.0;
+	}
+	
+	public double fitness2(Genome g) {
+		double fit = 0.0;
+		for(int a = 0; a < 2; a++) {
+			for(int b = 0; b < 2; b++) {
+				g.clear();
+				g.iterate(new double[]{a, b, 1.0}, 20);
+//				double delta = Math.abs(((a == 0 ^ b == 0) ? 1.0 : 0.0) - (g.getOut()[0]));
+				if((a == 0 ^ b == 0) == (g.getOut()[0] >= 0.5))
+					fit += 0.25;
+//				fit -= delta;
+			}
+		}
+		return fit;
 	}
 
 }

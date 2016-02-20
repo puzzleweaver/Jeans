@@ -1,8 +1,5 @@
 public class Main {
 
-	public static double distThreshhold = 3.0;
-	public static double POP = 150;
-
 	public static void main(String[] args) {
 
 		Population pop = new Population();
@@ -23,7 +20,6 @@ public class Main {
 			}
 			System.out.println(best);
 		}
-		
 		
 	}
 
