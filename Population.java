@@ -80,7 +80,7 @@ public class Population {
 		
 		// copy champions
 		for(int i = 0; i < species.size(); i++) {
-			double best = -1, val;
+			double best = 0, val;
 			Genome beast = null;
 			for(int j = 0; j < species.get(i).size(); j++) {
 				val = fitness(species.get(i).get(j));
@@ -90,13 +90,9 @@ public class Population {
 				}
 			}
 			nextGen.add(beast);
-			offspring[i]--;
-		}
-		
-		// fill in the rest with offspring
-		for(int i = 0; i < species.size(); i++) {
+			//fill in the rest with offspring
 			count = 0;
-			loop : while(count < offspring[i]) {
+			loop : while(count < offspring[i] - 1) {
 				if(Math.random() < 0.25) {
 					// asexual
 					int id = r.nextInt(species.get(i).size());
@@ -113,7 +109,7 @@ public class Population {
 				}
 			}
 		}
-
+		
 		// replace old generation with the new one
 		genome = nextGen;
 	}
@@ -191,29 +187,29 @@ public class Population {
 	public double fitness(Genome g) {
 		double fit = 4.0;
 		g.clear();
-		for(int a = 0; a < 2; a++) {
-			for(int b = 0; b < 2; b++) {
-				g.iterate(new double[]{a, b, 1.0}, 20);
-				double delta = Math.abs(((a == 0 ^ b == 0) ? 1.0 : 0.0) - (g.getOut()[0]));
+		for (int a = 0; a < 2; a++) {
+			for (int b = 0; b < 2; b++) {
+				g.iterate(new double[] { a, b, 1.0 }, 5);
+				double delta = Math.abs((((a == 1) ^ (b == 1)) ? 1.0 : 0.0) - (g.getOut()[0]));
 				fit -= delta;
 			}
 		}
-		return fit/4.0;
+		return fit / 4.0;
 	}
 	
-	public double fitness2(Genome g) {
-		double fit = 0.0;
-		for(int a = 0; a < 2; a++) {
-			for(int b = 0; b < 2; b++) {
-				g.clear();
-				g.iterate(new double[]{a, b, 1.0}, 20);
-//				double delta = Math.abs(((a == 0 ^ b == 0) ? 1.0 : 0.0) - (g.getOut()[0]));
-				if((a == 0 ^ b == 0) == (g.getOut()[0] >= 0.5))
-					fit += 0.25;
-//				fit -= delta;
-			}
-		}
-		return fit;
-	}
+//	public double fitness2(Genome g) {
+//		double fit = 0.0;
+//		for(int a = 0; a < 2; a++) {
+//			for(int b = 0; b < 2; b++) {
+//				g.clear();
+//				g.iterate(new double[]{a, b, 1.0}, 20);
+////				double delta = Math.abs(((a == 0 ^ b == 0) ? 1.0 : 0.0) - (g.getOut()[0]));
+//				if((a == 0 ^ b == 0) == (g.getOut()[0] >= 0.5))
+//					fit += 0.25;
+////				fit -= delta;
+//			}
+//		}
+//		return fit;
+//	}
 
 }
