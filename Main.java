@@ -3,7 +3,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		Population pop = new Population();
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 40; i++) {
 //			System.out.println("GEN: " + i);
 			pop.advance(1);
 			int[] spec = new int[pop.nextRep];
@@ -16,7 +16,9 @@ public class Main {
 //			System.out.println();
 			double best = 0;
 			for(int j = 0; j < pop.genome.size(); j++) {
-				best = Math.max(best, pop.fitness(pop.genome.get(j)));
+				Genome g = pop.genome.get(j);
+//				g = new Genome(""+g);
+				best = Math.max(best, pop.fitness(g));
 			}
 			System.out.println(best);
 		}

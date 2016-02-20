@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class Genome {
 
@@ -21,6 +22,7 @@ public class Genome {
 		
 	}
 
+	// g reproduces asexually
 	public Genome(Genome g) {
 
 		cons = new ArrayList<>();
@@ -37,6 +39,8 @@ public class Genome {
 		mutate();
 	
 	}
+	
+	// a and b crossover
 	public Genome(Genome a, Genome b) {
 
 		// switch a and b sometimes so that order doesn't matter
@@ -105,6 +109,44 @@ public class Genome {
 		}
 
 		mutate();
+	}
+	
+	// get text to save
+	public String toString() {
+		String out = cons.size() + " " + nodes.size() + " " + Node.nodeGIN + " " + Connection.conGIN + " " + inNum + " " + outNum + "\n";
+		for(int i = 0; i < cons.size(); i++) {
+			out += cons.get(i).a + " " + cons.get(i).b + " " + cons.get(i).weight + " " + cons.get(i).gin + "\n";
+		}
+		for(int i = 0; i < nodes.size(); i++) {
+			out += nodes.get(i).gin + " " + nodes.get(i).cons.size() + " ";
+			for(int j = 0; j < nodes.get(i).cons.size(); j++) {
+				out += nodes.get(i).cons.get(j) + " ";
+			}
+		}
+		return out;
+	}
+	// load from text
+	public Genome(String s) {
+		StringTokenizer st = new StringTokenizer(s);
+		int conNum = Integer.parseInt(st.nextToken()), nodeNum = Integer.parseInt(st.nextToken());
+		Node.nodeGIN = Integer.parseInt(st.nextToken());
+		Connection.conGIN = Integer.parseInt(st.nextToken());
+		inNum = Integer.parseInt(st.nextToken());
+		outNum = Integer.parseInt(st.nextToken());
+		for(int i = 0; i < conNum; i++) {
+			cons.add(new Connection(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
+					Double.parseDouble(st.nextToken()), Integer.parseInt(st.nextToken())));
+		}
+		Node n;
+		for(int i = 0; i < nodeNum; i++) {
+			n = new Node(false);
+			n.gin = Integer.parseInt(st.nextToken());
+			conNum = Integer.parseInt(st.nextToken());
+			for(int j = 0; j < conNum; j++) {
+				n.cons.add(Integer.parseInt(st.nextToken()));
+			}
+			nodes.add(n);
+		}
 	}
 	
 	public void mutate() {
@@ -198,14 +240,6 @@ public class Genome {
 		return out;
 	}
 
-	public String toString() {
-		String out = "";
-		for(int i = 0; i < cons.size(); i++) {
-			out += " (" + cons.get(i).a + ", " + cons.get(i).b + ", " + cons.get(i).weight + ")";
-		}
-		return out;
-	}
-	
 	public void clear() {
 		for(int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).val = 0;

@@ -194,7 +194,7 @@ public class Population {
 		for(int a = 0; a < 2; a++) {
 			for(int b = 0; b < 2; b++) {
 				g.iterate(new double[]{a, b, 1.0}, 20);
-				double delta = Math.abs(((a == 0 ^ b == 0) ? 1.0 : 0.0) - (g.getOut()[0]));
+				double delta = Math.abs((((a == 0) ^ (b == 0)) ? 1.0 : 0.0) - (g.getOut()[0]));
 				fit -= delta;
 			}
 		}
