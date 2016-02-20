@@ -35,7 +35,6 @@ public class Population {
 			}
 			if(min >= distThreshold) {
 				// add new species
-				System.out.println("djkafls");
 				rep.add(genome.get(i));
 				genome.get(i).species = nextRep;
 				nextRep++;
