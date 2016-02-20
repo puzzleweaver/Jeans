@@ -5,7 +5,7 @@ public class Population {
 
 	public static Random r = new Random();
 
-	public double targetPop = 150, distThreshold = 1.0;
+	public double targetPop = 150, distThreshold = 3.0;
 	public ArrayList<Genome> genome = new ArrayList<Genome>();
 	public ArrayList<Genome> rep = new ArrayList<Genome>();
 	public int nextRep;
@@ -173,15 +173,17 @@ public class Population {
 
 	public double fitness(Genome g) {
 		g.clear();
-		double fit = 0.0;
+		double fit = 4.0;
 		for(int a = 0; a < 2; a++) {
 			for(int b = 0; b < 2; b++) {
 				g.iterate(new double[]{a, b, 1.0}, 20);
-				if((a == 0 ^ b == 0) == (g.getOut()[0] >= 0))
-					fit += 0.25;
+				double delta = Math.abs(((a == 0 ^ b == 0) ? 1.0 : 0.0) - (g.getOut()[0]));
+//				if((a == 0 ^ b == 0) == (g.getOut()[0] >= 0.75))
+//					fit += 0.25;
+				fit -= delta;
 			}
 		}
-		return fit;
+		return fit/4.0;
 	}
 
 }
