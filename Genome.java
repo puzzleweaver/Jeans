@@ -3,6 +3,8 @@ import java.util.StringTokenizer;
 
 public class Genome {
 
+	public static double range = 1.0, range1 = 0.1;
+	
 	public ArrayList<Connection> cons = new ArrayList<>();
 	public ArrayList<Node> nodes = new ArrayList<>();
 	public int inNum, outNum;
@@ -153,9 +155,9 @@ public class Genome {
 				int id = Population.r.nextInt(cons.size());
 				nodes.add(new Node(true));
 				cons.get(id).enabled = false;
-				cons.add(new Connection(cons.get(id).a, nodes.size()-1, Math.random()*4-2));
+				cons.add(new Connection(cons.get(id).a, nodes.size()-1, Math.random()*2*range-range));
 				nodes.get(cons.get(id).a).cons.add(cons.size()-1);
-				cons.add(new Connection(nodes.size()-1, cons.get(id).b, Math.random()*4-2));
+				cons.add(new Connection(nodes.size()-1, cons.get(id).b, Math.random()*2*range-range));
 				nodes.get(cons.get(cons.size()-1).a).cons.add(cons.size()-1);
 			}
 		}
@@ -170,7 +172,7 @@ public class Genome {
 				}
 			}
 			if(unique) {
-				cons.add(new Connection(a, b, Math.random()*4-2));
+				cons.add(new Connection(a, b, Math.random()*2*range-range));
 				nodes.get(a).cons.add(cons.size()-1);
 			}
 		}
@@ -178,12 +180,12 @@ public class Genome {
 		if(Math.random() < 0.9) {
 			// change all weights slightly
 			for(int i = 0; i < cons.size(); i++) {
-				cons.get(i).weight *= Math.random()*0.75+0.625;
+				cons.get(i).weight *= Math.random()*range1+1.0-range1*0.5;
 			}
 		} else {
 			// randomize all weights
 			for(int i = 0; i < cons.size(); i++) {
-				cons.get(i).weight = Math.random()*2-1;
+				cons.get(i).weight = Math.random()*2*range-range;
 			}
 		}
 	}

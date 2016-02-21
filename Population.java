@@ -5,7 +5,7 @@ public class Population {
 
 	public static Random r = new Random();
 
-	public double targetPop = 150, distThreshold = 1.0;
+	public double targetPop = 50, distThreshold = 3.0;
 	public ArrayList<Genome> genome = new ArrayList<Genome>();
 	public ArrayList<Genome> rep = new ArrayList<Genome>();
 	public int nextRep;
@@ -15,15 +15,14 @@ public class Population {
 	
 	private FitnessEvaluator fitness;
 
-	public Population() {
+	public Population(int ins, int outs) {
 		// create simple initial network manually
-		genome.add(new Genome(3, 1));
-		genome.get(0).cons.add(new Connection(0, 3, Math.random()*2-1));
-		genome.get(0).nodes.get(0).cons.add(0);
-		genome.get(0).cons.add(new Connection(1, 3, Math.random()*2-1));
-		genome.get(0).nodes.get(1).cons.add(1);
-		genome.get(0).cons.add(new Connection(2, 3, Math.random()*2-1));
-		genome.get(0).nodes.get(2).cons.add(2);
+		genome.add(new Genome(ins, outs));
+		for(int i = 0; i < outs; i++) {
+			int rid = r.nextInt(ins);
+			genome.get(0).cons.add(new Connection(rid, ins+i, Math.random()*2-1));
+			genome.get(0).nodes.get(rid).cons.add(genome.get(0).cons.size()-1);
+		}
 	}
 
 	public void setFitnessEvaluator(FitnessEvaluator f) {
@@ -56,8 +55,6 @@ public class Population {
 				}
 			}
 			
-			System.out.println(nextRep);
-	
 			// calculate number of offspring for each species
 			double offspring[] = new double[nextRep], total = 0.00001, delta;
 			for(int i = 0; i < genome.size(); i++) {
@@ -115,14 +112,14 @@ public class Population {
 						int id = r.nextInt(species.get(i).size());
 						nextGen.add(new Genome(genome.get(species.get(i).get(id))));
 						count++;
-					}else {
-						// sexual
-						int id1 = r.nextInt(species.get(i).size()),
-								id2 = r.nextInt(species.get(i).size());
-						if(id1 == id2)
-							continue loop;
-						nextGen.add(new Genome(genome.get(species.get(i).get(id1)), genome.get(species.get(i).get(id2))));
-						count++;
+//					}else {
+//						// sexual
+//						int id1 = r.nextInt(species.get(i).size()),
+//								id2 = r.nextInt(species.get(i).size());
+//						if(id1 == id2)
+//							continue loop;
+//						nextGen.add(new Genome(genome.get(species.get(i).get(id1)), genome.get(species.get(i).get(id2))));
+//						count++;
 					}
 				}
 			}
