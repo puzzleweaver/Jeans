@@ -5,7 +5,7 @@ public class Population {
 
 	public static Random r = new Random();
 
-	public double targetPop = 50, distThreshold = 3.0;
+	public double targetPop = 150, distThreshold = 3.0;
 	public ArrayList<Genome> genome = new ArrayList<Genome>();
 	public ArrayList<Genome> rep = new ArrayList<Genome>();
 	public int nextRep;

@@ -15,7 +15,7 @@ public class Main implements FitnessEvaluator {
 		Main fitness = new Main();
 		Population pop = new Population(11, 10);
 		pop.setFitnessEvaluator(fitness);
-		int gens = 5000;
+		int gens = 500;
 		double bests[][] = new double[gens][10];//(int) pop.targetPop];
 		for (int i = 0; i < gens; i++) {
 			// System.out.println("GEN: " + i);
